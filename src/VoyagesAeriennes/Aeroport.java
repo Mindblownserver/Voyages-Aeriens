@@ -3,6 +3,8 @@ package VoyagesAeriennes;
 public class Aeroport {
     private String nom;
     private String code;
+    private Vol voles[];
+    private TarifLocal tarif;
     public Aeroport(String nom, String code) {
         this.nom = nom;
         this.code = code;

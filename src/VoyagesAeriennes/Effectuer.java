@@ -6,13 +6,17 @@ public class Effectuer {
     private Appareil A;
     
     public Effectuer(Vol V, Appareil A, DateVol date, double chargeUtile) {
+        this.V = V;
+        this.A = A;
+        this.date = date;
         this.V.ajouterAppareil(A);
         this.V.ajouterDate(date);
+        if(this.A.chargeUtileValide(chargeUtile)) this.V.setChargeUtile(chargeUtile);
         this.A.ajouterDate(date);
         this.A.ajouterVol(V);
-        this.A.ajouterChargeUtile(chargeUtile)
         this.date.ajouterVol(V);
         this.date.ajouterAppareil(A);
+        //this.A.ajouterChargeUtile(chargeUtile);
     }
     public DateVol getDateVol() {
         return date;

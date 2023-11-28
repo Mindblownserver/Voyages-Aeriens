@@ -2,7 +2,7 @@ package VoyagesAeriennes;
 
 import java.util.Date;
 
-import MethodesStatiques.MethodesTableaux;
+import MethodesStatiques.MethodesUniverselles;
 
 public class DateVol {
     private Date dateDepart;
@@ -92,7 +92,7 @@ public class DateVol {
             a = appareils[i];
         }
         if(i<capaciteAppareil){
-            MethodesTableaux.decalage(appareils,i,capaciteAppareil);
+            MethodesUniverselles.decalage(appareils,i,capaciteAppareil);
             capaciteAppareil--;
         }
         else{
@@ -119,7 +119,7 @@ public class DateVol {
         }
 
         if(i<capaciteVoles){
-            MethodesTableaux.decalage(voles,i,capaciteVoles);
+            MethodesUniverselles.decalage(voles,i,capaciteVoles);
             capaciteVoles--;
         }
         else{
