@@ -9,7 +9,7 @@ public class Partir {
         this.depart = depart;
         this.vol = vol;
         this.vol.setDepart(depart);
-        depart.ajouterVol(vol);
+        depart.ajouterVolDeparts(vol);
 
     }
     public Partir(Aeroport depart, TronconDuVol troncon) {

@@ -1,9 +1,12 @@
 package VoyagesAeriennes;
 
+import Exceptions.ModelAppareilNotUniqueException;
 import MethodesStatiques.MethodesUniverselles;
 
 public class Appareil {
     private String model;
+    private static String models[];
+    private static int tailleModels=0;
     private double capaciteCarburant,equippage;
     private double consommationVide; // n’inclut pas le transport du carburant lui-même
     private double chargeUtilMax;
@@ -16,8 +19,13 @@ public class Appareil {
     private int capaciteChargeUtil=-1; */
     
     // Constructor    
-    public Appareil(String model, double capaciteCarburant, double equippage,/* double capaciteChargeUtil, */ double consommationVide, double consommationSupp, double chargeUtilMax) {
+    public Appareil(String model, double capaciteCarburant, double equippage,/* double capaciteChargeUtil, */ double consommationVide, double consommationSupp, double chargeUtilMax)throws ModelAppareilNotUniqueException {
+        if(existe(model, models, tailleModels))
+            throw new ModelAppareilNotUniqueException(model);
         this.model = model;
+        // ajouter model
+        ajouterElement(model);
+
         this.chargeUtilMax = chargeUtilMax;
         this.capaciteCarburant = capaciteCarburant;
         this.equippage = equippage;
@@ -27,12 +35,65 @@ public class Appareil {
         this.voles = new Vol[0];
         this.capaciteVoles ++;;
     }
-    // getters & setters
 
+    public static void ajouterElement(String model){
+        String m[] = new String[tailleModels+1];
+        MethodesUniverselles.copierTableaux(m,models,tailleModels);
+        m[tailleModels] = model;
+        models = m;
+        tailleModels++;
+    }
+
+    public static boolean existe(String ch, String[]tab,int tailleC){
+        int i=0;
+        while(ch.compareTo(tab[i])!=0 && i<tailleC)
+            i++;
+        return(i>=tailleC)?false:true;
+    }
+
+
+    // getters & setters
+    
     public String getModel() {
         return model;
     }
     
+    public static String[] getModels() {
+        return models;
+    }
+
+    public static void setModels(String[] models) {
+        Appareil.models = models;
+    }
+
+    public static int getTailleModels() {
+        return tailleModels;
+    }
+
+    public static void setTailleModels(int tailleModels) {
+        Appareil.tailleModels = tailleModels;
+    }
+
+    public double getChargeUtilMax() {
+        return chargeUtilMax;
+    }
+
+
+    public void setChargeUtilMax(double chargeUtilMax) {
+        this.chargeUtilMax = chargeUtilMax;
+    }
+
+
+    public int getCapaciteVoles() {
+        return capaciteVoles;
+    }
+
+
+    public void setCapaciteVoles(int capaciteVoles) {
+        this.capaciteVoles = capaciteVoles;
+    }
+
+
     public void setModel(String model) {
         this.model = model;
     }

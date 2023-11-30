@@ -2,9 +2,12 @@ package VoyagesAeriennes;
 
 import java.util.Date;
 
+import Exceptions.CodeDateVolNotUniqueException;
 import MethodesStatiques.MethodesUniverselles;
 
 public class DateVol {
+    private static String codes[];// le dateDepart et dateArrive sont des clés primaires
+    private static int tailleC=0;
     private Date dateDepart;
     private Date dateArrive;
     private Vol voles[];
@@ -12,13 +15,31 @@ public class DateVol {
     private Appareil appareils[];
     private int capaciteAppareil=-1;
 
-    public DateVol(Date dateDepart, Date dateArrive) {
+    public DateVol(Date dateDepart, Date dateArrive)throws CodeDateVolNotUniqueException {
+        if(existe(dateDepart+" "+dateArrive))
+            throw new CodeDateVolNotUniqueException();
+        ajouterElement(dateDepart+" "+dateArrive);
         this.dateDepart = dateDepart;
         this.dateArrive = dateArrive;
         this.capaciteVoles ++;
         this.voles = new Vol[capaciteVoles];
         this.capaciteAppareil ++;
         appareils = new Appareil[capaciteAppareil];
+    }
+
+    public static void ajouterElement(String code){
+        String c[] = new String[tailleC+1];
+        MethodesUniverselles.copierTableaux(c,codes,tailleC);
+        c[tailleC] = code;
+        codes = c;
+        tailleC++;
+    }
+
+    public static boolean existe(String date){
+        int i=0;
+        while(date.compareTo(codes[i])!=0 && i<tailleC)
+            i++;
+        return(i>=tailleC)?false:true;
     }
 
     //getters & setters
@@ -102,9 +123,7 @@ public class DateVol {
 
     public void ajouterVol(Vol V){
         Vol v[] = new Vol[capaciteVoles+1];
-        for(int i=0;i<capaciteVoles;i++){
-            v[i] = voles[i];
-        }
+        MethodesUniverselles.copierTableaux(v, voles, capaciteVoles);
         v[capaciteVoles]=V;
         voles = v;
         capaciteVoles++;

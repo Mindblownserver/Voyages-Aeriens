@@ -22,6 +22,7 @@ public class TronconDuVol {
         this.carburantNecessaire = carburantNecessaire;   
     }
 
+    
     public Vol getVol() {
         return vol;
     }
@@ -61,6 +62,16 @@ public class TronconDuVol {
     // methods
     public boolean equals(TronconDuVol t){
         return (depart.getCode() == t.depart.getCode() && destination.getCode() == destination.getCode() && date.equals(t.date))? true:false;
+    }
+
+
+    public double getCarburantNecessaire() {
+        return carburantNecessaire;
+    }
+
+
+    public void setCarburantNecessaire(double carburantNecessaire) {
+        this.carburantNecessaire = carburantNecessaire;
     }
 
 }

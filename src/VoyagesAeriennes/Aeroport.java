@@ -10,20 +10,28 @@ public class Aeroport {
     private static String codes[];
     private static int tailleCodes=0;
     private Vol volesDeparts[];
+    private int capaciteVolesDeparts =-1;
     private Vol volesArrive[];
+    private int capaciteVolesArrive =-1;
     private TarifLocal tarif;
+    
     public Aeroport(String nom) {
         this.nom = nom;
         this.code = generateString(nom+"0123456789@^\\#&~|-_@=+°)({}[]", 5,tailleCodes);
         // ajouter code unique au codes
         ajouterElement(code);
-
+        // voles
+        this.capaciteVolesDeparts ++;
+        this.volesDeparts = new Vol[capaciteVolesDeparts];
+        this.capaciteVolesArrive ++;
+        this.volesArrive = new Vol[capaciteVolesArrive];
     }   
 
     public static void ajouterElement(String code){
         String c[] = new String[tailleCodes+1];
         MethodesUniverselles.copierTableaux(c,codes,tailleCodes);
         c[tailleCodes] = code;
+        codes = c;
         tailleCodes++;
     }
 
@@ -48,9 +56,55 @@ public class Aeroport {
         return res;
     }
 
-    public void ajouterVol(Vol v){
-        //
+    public void ajouterVolDeparts(Vol V){
+        Vol v[] = new Vol[capaciteVolesDeparts+1];
+        MethodesUniverselles.copierTableaux(v, volesDeparts, capaciteVolesDeparts);
+        v[capaciteVolesDeparts]=V;
+        volesDeparts = v;
+        capaciteVolesDeparts++;
     }
+
+    public void supprimerVoldDeparts(Vol V){
+        Vol v = volesDeparts[0];
+        int i=0;
+        while(!V.equals(v) && i<capaciteVolesDeparts){
+            i++;
+            v = volesDeparts[i];
+        }
+        if(i<capaciteVolesDeparts){
+            MethodesUniverselles.decalage(volesDeparts,i,capaciteVolesDeparts);
+            capaciteVolesDeparts--;
+        }
+        else{
+            return;
+        }
+    }
+
+    public void ajouterVolArrive(Vol V){
+        Vol v[] = new Vol[capaciteVolesArrive+1];
+        MethodesUniverselles.copierTableaux(v, volesArrive, capaciteVolesArrive);
+        v[capaciteVolesArrive]=V;
+        volesArrive = v;
+        capaciteVolesArrive++;
+    }
+
+    public void supprimerVoldArrive(Vol V){
+        Vol v = volesArrive[0];
+        int i=0;
+        while(!V.equals(v) && i<capaciteVolesArrive){
+            i++;
+            v = volesArrive[i];
+        }
+        if(i<capaciteVolesArrive){
+            MethodesUniverselles.decalage(volesArrive,i,capaciteVolesArrive);
+            capaciteVolesArrive--;
+        }
+        else{
+            return;
+        }
+    }
+
+
 
     public String getNom() {
         return nom;
@@ -64,4 +118,61 @@ public class Aeroport {
     public void setCode(String code) {
         this.code = code;
     }
+    public static String[] getCodes() {
+        return codes;
+    }
+
+    public static void setCodes(String[] codes) {
+        Aeroport.codes = codes;
+    }
+
+    public static int getTailleCodes() {
+        return tailleCodes;
+    }
+
+    public static void setTailleCodes(int tailleCodes) {
+        Aeroport.tailleCodes = tailleCodes;
+    }
+
+    public Vol[] getVolesDeparts() {
+        return volesDeparts;
+    }
+
+    public void setVolesDeparts(Vol[] volesDeparts) {
+        this.volesDeparts = volesDeparts;
+    }
+
+    public int getCapaciteVolesDeparts() {
+        return capaciteVolesDeparts;
+    }
+
+    public void setCapaciteVolesDeparts(int capaciteVolesDeparts) {
+        this.capaciteVolesDeparts = capaciteVolesDeparts;
+    }
+
+    public Vol[] getVolesArrive() {
+        return volesArrive;
+    }
+
+    public void setVolesArrive(Vol[] volesArrive) {
+        this.volesArrive = volesArrive;
+    }
+
+    public int getCapaciteVolesArrive() {
+        return capaciteVolesArrive;
+    }
+
+    public void setCapaciteVolesArrive(int capaciteVolesArrive) {
+        this.capaciteVolesArrive = capaciteVolesArrive;
+    }
+
+    public TarifLocal getTarif() {
+        return tarif;
+    }
+
+    public void setTarif(TarifLocal tarif) {
+        this.tarif = tarif;
+    }
+
+
 }
