@@ -7,6 +7,7 @@ public class Vol {
     private String code;
     private Aeroport depart;
     private Aeroport destination;
+    private String typeVol;
     private TronconDuVol troncons[];
     private int capaciteTroncon=-1;
     private Aeroport escales[];
@@ -18,9 +19,9 @@ public class Vol {
     private int capaciteDates=-1;
     private double chargeUtile;
 
-    public Vol(Aeroport depart, Aeroport destination,double chargeUtil) {
-        code = depart+"%20"+destination;
-
+    public Vol(Aeroport depart, Aeroport destination,String typeVol,double chargeUtil) {
+        code = depart.getCode()+"%20"+destination.getCode();
+        this.typeVol = typeVol;
         this.chargeUtile = chargeUtil;
 
         this.depart = depart;

@@ -12,13 +12,14 @@ public class TronconDuVol {
     private double carburantNecessaire; // (en litres)
     
 
-    public TronconDuVol(Vol vol, String code, Aeroport depart, Aeroport destination, DateVol date, double longueur) {
+    public TronconDuVol(Vol vol, String code,double carburantNecessaire ,Aeroport depart, Aeroport destination, DateVol date, double longueur) {
         this.vol = vol;
-        this.code = code; // a changer
+        this.code = depart.getCode()+"%20"+destination.getCode(); // a changer, incorporer depart et desnation avec le code
         this.depart = depart;
         this.destination = destination;
         this.date = date;
         this.longueur = longueur;
+        this.carburantNecessaire = carburantNecessaire;   
     }
 
     public Vol getVol() {
