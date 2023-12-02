@@ -1,5 +1,6 @@
 package VoyagesAeriennes;
 
+import Exceptions.ChargeUtilMaxDepasseException;
 import Exceptions.ModelAppareilNotUniqueException;
 import MethodesStatiques.MethodesUniverselles;
 
@@ -13,20 +14,21 @@ public class Appareil {
     private double consommationSupp;
     private Vol voles[];
     private int capaciteVoles=-1;// aussi capaciteChargeUtil
+    private int capaciteVolesMax;
     private DateVol dates[];
     private int capaciteDates=-1;
     /* private double chargeUtile[];
     private int capaciteChargeUtil=-1; */
     
     // Constructor    
-    public Appareil(String model, double capaciteCarburant, double equippage,/* double capaciteChargeUtil, */ double consommationVide, double consommationSupp, double chargeUtilMax)throws ModelAppareilNotUniqueException {
+    public Appareil(String model, double capaciteCarburant, double equippage, int capaciteVolesMax, double consommationVide, double consommationSupp, double chargeUtilMax)throws ModelAppareilNotUniqueException {
         if(existe(model, models, tailleModels))
             throw new ModelAppareilNotUniqueException(model);
         this.model = model;
         // ajouter model
         ajouterElement(model);
-
         this.chargeUtilMax = chargeUtilMax;
+        this.capaciteVolesMax = capaciteVolesMax;
         this.capaciteCarburant = capaciteCarburant;
         this.equippage = equippage;
         this.consommationVide = consommationVide;
@@ -53,7 +55,14 @@ public class Appareil {
 
 
     // getters & setters
-    
+    public int getCapaciteVolesMax() {
+        return capaciteVolesMax;
+    }
+
+    public void setCapaciteVolesMax(int capaciteVolesMax) {
+        this.capaciteVolesMax = capaciteVolesMax;
+    }
+
     public String getModel() {
         return model;
     }
@@ -160,6 +169,10 @@ public class Appareil {
         this.capaciteDates = capaciteDates;
     }
     // methods
+    public int getVolParDate(DateVol date){ // à faire
+        return 0;
+    }
+
     public double getConsommationEnVol(){
         return consommationSupp + consommationVide;
     }
@@ -215,9 +228,12 @@ public class Appareil {
             return;// exception!
         }
     }
-    public void ravitalleEnCarburant(double carburant){ this.capaciteCarburant = carburant;}
-    public boolean chargeUtileValide(double charge){
-        return(charge<=chargeUtilMax)?true:false; // exception
+    public void ravitalleEnCarburant(double carburant){ this.capaciteCarburant += carburant;}
+    public boolean chargeUtileValide(double charge)throws ChargeUtilMaxDepasseException{
+        if(charge>chargeUtilMax)
+            throw new ChargeUtilMaxDepasseException(chargeUtilMax);
+        else 
+            return true;
     }
 }
 /* 

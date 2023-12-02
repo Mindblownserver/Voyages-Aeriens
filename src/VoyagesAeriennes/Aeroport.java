@@ -2,6 +2,7 @@ package VoyagesAeriennes;
 
 import java.util.Random;
 
+import Exceptions.VolNotFoundException;
 import MethodesStatiques.MethodesUniverselles;
 
 public class Aeroport {
@@ -15,7 +16,7 @@ public class Aeroport {
     private int capaciteVolesArrive =-1;
     private TarifLocal tarif;
     
-    public Aeroport(String nom) {
+    public Aeroport(String nom){
         this.nom = nom;
         this.code = generateString(nom+"0123456789@^\\#&~|-_@=+°)({}[]", 5,tailleCodes);
         // ajouter code unique au codes
@@ -27,85 +28,7 @@ public class Aeroport {
         this.volesArrive = new Vol[capaciteVolesArrive];
     }   
 
-    public static void ajouterElement(String code){
-        String c[] = new String[tailleCodes+1];
-        MethodesUniverselles.copierTableaux(c,codes,tailleCodes);
-        c[tailleCodes] = code;
-        codes = c;
-        tailleCodes++;
-    }
-
-    public static boolean existe(String ch, String[]tab,int tailleC){
-        int i=0;
-        while(ch.compareTo(tab[i])!=0 && i<tailleC)
-            i++;
-        return(i>=tailleC)?false:true;
-    }
-
-    public static String generateString(String characters, int length, int tailleC){
-        char[] text = new char[length];
-        Random rng = new Random();
-        String res;
-        do{
-            for (int i = 0; i < length; i++)
-            {
-                text[i] = characters.charAt(rng.nextInt(characters.length()));
-            }
-            res = new String(text);
-        }while(existe(res,codes,tailleC));
-        return res;
-    }
-
-    public void ajouterVolDeparts(Vol V){
-        Vol v[] = new Vol[capaciteVolesDeparts+1];
-        MethodesUniverselles.copierTableaux(v, volesDeparts, capaciteVolesDeparts);
-        v[capaciteVolesDeparts]=V;
-        volesDeparts = v;
-        capaciteVolesDeparts++;
-    }
-
-    public void supprimerVoldDeparts(Vol V){
-        Vol v = volesDeparts[0];
-        int i=0;
-        while(!V.equals(v) && i<capaciteVolesDeparts){
-            i++;
-            v = volesDeparts[i];
-        }
-        if(i<capaciteVolesDeparts){
-            MethodesUniverselles.decalage(volesDeparts,i,capaciteVolesDeparts);
-            capaciteVolesDeparts--;
-        }
-        else{
-            return;
-        }
-    }
-
-    public void ajouterVolArrive(Vol V){
-        Vol v[] = new Vol[capaciteVolesArrive+1];
-        MethodesUniverselles.copierTableaux(v, volesArrive, capaciteVolesArrive);
-        v[capaciteVolesArrive]=V;
-        volesArrive = v;
-        capaciteVolesArrive++;
-    }
-
-    public void supprimerVoldArrive(Vol V){
-        Vol v = volesArrive[0];
-        int i=0;
-        while(!V.equals(v) && i<capaciteVolesArrive){
-            i++;
-            v = volesArrive[i];
-        }
-        if(i<capaciteVolesArrive){
-            MethodesUniverselles.decalage(volesArrive,i,capaciteVolesArrive);
-            capaciteVolesArrive--;
-        }
-        else{
-            return;
-        }
-    }
-
-
-
+    //getters & setters
     public String getNom() {
         return nom;
     }
@@ -173,6 +96,85 @@ public class Aeroport {
     public void setTarif(TarifLocal tarif) {
         this.tarif = tarif;
     }
+
+    //methods
+    public static void ajouterElement(String code){
+        String c[] = new String[tailleCodes+1];
+        MethodesUniverselles.copierTableaux(c,codes,tailleCodes);
+        c[tailleCodes] = code;
+        codes = c;
+        tailleCodes++;
+    }
+
+    public static boolean existe(String ch, String[]tab,int tailleC){
+        int i=0;
+        while(ch.compareTo(tab[i])!=0 && i<tailleC)
+            i++;
+        return(i>=tailleC)?false:true;
+    }
+
+    public static String generateString(String characters, int length, int tailleC){
+        char[] text = new char[length];
+        Random rng = new Random();
+        String res;
+        do{
+            for (int i = 0; i < length; i++)
+            {
+                text[i] = characters.charAt(rng.nextInt(characters.length()));
+            }
+            res = new String(text);
+        }while(existe(res,codes,tailleC));
+        return res;
+    }
+
+    public void ajouterVolDeparts(Vol V){
+        Vol v[] = new Vol[capaciteVolesDeparts+1];
+        MethodesUniverselles.copierTableaux(v, volesDeparts, capaciteVolesDeparts);
+        v[capaciteVolesDeparts]=V;
+        volesDeparts = v;
+        capaciteVolesDeparts++;
+    }
+
+    public void supprimerVoldDeparts(Vol V) throws VolNotFoundException{
+        Vol v = volesDeparts[0];
+        int i=0;
+        while(!V.equals(v) && i<capaciteVolesDeparts){
+            i++;
+            v = volesDeparts[i];
+        }
+        if(i<capaciteVolesDeparts){
+            MethodesUniverselles.decalage(volesDeparts,i,capaciteVolesDeparts);
+            capaciteVolesDeparts--;
+        }
+        else{
+            throw new VolNotFoundException(V);
+        }
+    }
+
+    public void ajouterVolArrive(Vol V){
+        Vol v[] = new Vol[capaciteVolesArrive+1];
+        MethodesUniverselles.copierTableaux(v, volesArrive, capaciteVolesArrive);
+        v[capaciteVolesArrive]=V;
+        volesArrive = v;
+        capaciteVolesArrive++;
+    }
+
+    public void supprimerVoldArrive(Vol V)throws VolNotFoundException{
+        Vol v = volesArrive[0];
+        int i=0;
+        while(!V.equals(v) && i<capaciteVolesArrive){
+            i++;
+            v = volesArrive[i];
+        }
+        if(i<capaciteVolesArrive){
+            MethodesUniverselles.decalage(volesArrive,i,capaciteVolesArrive);
+            capaciteVolesArrive--;
+        }
+        else{
+            throw new VolNotFoundException(V);
+        }
+    }
+
 
 
 }

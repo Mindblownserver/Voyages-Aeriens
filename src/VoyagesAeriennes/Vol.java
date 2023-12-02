@@ -1,5 +1,7 @@
 package VoyagesAeriennes;
 
+import Exceptions.AppareilNotFoundException;
+import Exceptions.InvalidTronconException;
 import MethodesStatiques.MethodesUniverselles;
 
 // verifier l'unicité des clés primaires
@@ -10,9 +12,6 @@ public class Vol {
     private String typeVol;
     private TronconDuVol troncons[];
     private int capaciteTroncon=-1;
-    private Aeroport escales[];
-    private int nombresEscales=-1; // ici à chaque escale peut simplement utilser le nombre d'escale sans avoir une autre relation avec Aeroport
-    //private int nombresEscalesMax=-1;
     private Appareil appareils[];
     private int capaciteAppareil=-1;
     private DateVol dates[];
@@ -28,8 +27,8 @@ public class Vol {
         this.destination = destination;
         
         //this.nombresEscalesMax ++;
-        this.nombresEscales++;
-        this.escales= new Aeroport[/* this.nombresEscalesMax */0];
+        /* this.nombresEscales++;
+        this.escales= new Aeroport[/* this.nombresEscalesMax 0];*/
         capaciteTroncon++;
         troncons = new TronconDuVol[capaciteTroncon];
         
@@ -103,7 +102,46 @@ public class Vol {
         this.chargeUtile = chargeUtile;
     }
     
+    public String getTypeVol() {
+        return typeVol;
+    }
+
+    public void setTypeVol(String typeVol) {
+        this.typeVol = typeVol;
+    }
+
+    public TronconDuVol[] getTroncons() {
+        return troncons;
+    }
+
+    public void setTroncons(TronconDuVol[] troncons) {
+        this.troncons = troncons;
+    }
+
+    public int getCapaciteTroncon() {
+        return capaciteTroncon;
+    }
+
+    public void setCapaciteTroncon(int capaciteTroncon) {
+        this.capaciteTroncon = capaciteTroncon;
+    }
+    
+    
     // methods
+    public boolean existe(DateVol date){
+        int i=0;
+        while(i<capaciteDates && !dates[i].equals(date))
+            i++;
+        return (i<capaciteDates)?true:false;
+    }
+
+    public boolean existe(Appareil appareil){
+        int i=0;
+        while(i<capaciteAppareil && !appareils[i].equals(appareil))
+            i++;
+        return (i<capaciteDates)?true:false;
+    }
+
     public double getLongueurTotale(){
         double s=0;
         for(TronconDuVol tr: troncons)
@@ -126,7 +164,7 @@ public class Vol {
         capaciteAppareil++;
     }
     
-    public void supprimerAppareil(Appareil A){
+    public void supprimerAppareil(Appareil A)throws AppareilNotFoundException{
         Appareil a = appareils[0];
         int i=0;
         while(!A.equals(a) && i<capaciteAppareil){
@@ -138,7 +176,7 @@ public class Vol {
             capaciteAppareil--;
         }
         else{
-            return;
+            throw new AppareilNotFoundException(A);
         }
     }
     
@@ -184,7 +222,13 @@ public class Vol {
         capaciteTroncon++;
     }
     
-    
+    public boolean tronconValide(TronconDuVol t)throws InvalidTronconException{
+        TronconDuVol tronconPrec= troncons[capaciteTroncon-1];
+        if(!t.getDepart().equals(tronconPrec.getDestination()) || /* TronconDuVol precedant doit avoir une date inferieure ou égale au nouveau troncon */ tronconPrec.getDate().getDateArrive().compareTo(t.getDate().getDateDepart())>0)
+            throw new InvalidTronconException(t.getDepart(), troncons[capaciteTroncon-1].getDestination());
+        return true;
+    }
+
 }
 /* 
 public Aeroport[] getEscales() {

@@ -2,7 +2,9 @@ package VoyagesAeriennes;
 
 import java.util.Date;
 
+import Exceptions.AppareilNotFoundException;
 import Exceptions.CodeDateVolNotUniqueException;
+import Exceptions.VolNotFoundException;
 import MethodesStatiques.MethodesUniverselles;
 
 public class DateVol {
@@ -16,8 +18,8 @@ public class DateVol {
     private int capaciteAppareil=-1;
 
     public DateVol(Date dateDepart, Date dateArrive)throws CodeDateVolNotUniqueException {
-        if(existe(dateDepart+" "+dateArrive))
-            throw new CodeDateVolNotUniqueException();
+        if(existe(dateDepart+"-"+dateArrive))
+            throw new CodeDateVolNotUniqueException(dateDepart+"-"+dateArrive);
         ajouterElement(dateDepart+" "+dateArrive);
         this.dateDepart = dateDepart;
         this.dateArrive = dateArrive;
@@ -25,21 +27,6 @@ public class DateVol {
         this.voles = new Vol[capaciteVoles];
         this.capaciteAppareil ++;
         appareils = new Appareil[capaciteAppareil];
-    }
-
-    public static void ajouterElement(String code){
-        String c[] = new String[tailleC+1];
-        MethodesUniverselles.copierTableaux(c,codes,tailleC);
-        c[tailleC] = code;
-        codes = c;
-        tailleC++;
-    }
-
-    public static boolean existe(String date){
-        int i=0;
-        while(date.compareTo(codes[i])!=0 && i<tailleC)
-            i++;
-        return(i>=tailleC)?false:true;
     }
 
     //getters & setters
@@ -92,6 +79,21 @@ public class DateVol {
     }
 
     //methodes
+    public static void ajouterElement(String code){
+        String c[] = new String[tailleC+1];
+        MethodesUniverselles.copierTableaux(c,codes,tailleC);
+        c[tailleC] = code;
+        codes = c;
+        tailleC++;
+    }
+
+    public static boolean existe(String date){
+        int i=0;
+        while(date.compareTo(codes[i])!=0 && i<tailleC)
+            i++;
+        return(i>=tailleC)?false:true;
+    }
+
     public boolean equals(DateVol date){
         return (date.dateArrive == this.dateArrive && dateDepart == date.dateDepart)?true:false;
     }
@@ -105,7 +107,7 @@ public class DateVol {
         capaciteAppareil++;
     }
 
-    public void supprimerAppareil(Appareil A){
+    public void supprimerAppareil(Appareil A)throws AppareilNotFoundException{
         Appareil a = appareils[0];
         int i=0;
         while(!A.equals(a) && i<capaciteAppareil){
@@ -117,7 +119,7 @@ public class DateVol {
             capaciteAppareil--;
         }
         else{
-            return;
+            throw new AppareilNotFoundException(A);
         }
     }
 
@@ -129,7 +131,7 @@ public class DateVol {
         capaciteVoles++;
     }
 
-    public void supprimerVol(Vol V){
+    public void supprimerVol(Vol V)throws VolNotFoundException{
         Vol v = voles[0];
         int i=0;
         while(!V.equals(v) && i<capaciteVoles){
@@ -142,7 +144,7 @@ public class DateVol {
             capaciteVoles--;
         }
         else{
-            return;
+            throw new VolNotFoundException(V);
         }
     }
 }

@@ -1,7 +1,9 @@
 package VoyagesAeriennes;
 
-//Est-ce que j'utilise une classe differente pour décrire le Troncon du vol ou simplement met ses attributs dans la classe Vol? 
+import Exceptions.DateVolNotFoundException;
 
+//Est-ce que j'utilise une classe differente pour décrire le Troncon du vol ou simplement met ses attributs dans la classe Vol? 
+//  ajouter controle sur la date saisie, date < date d'aujourd'hui;
 public class TronconDuVol {
     private Vol vol;
     private String code;
@@ -12,16 +14,15 @@ public class TronconDuVol {
     private double carburantNecessaire; // (en litres)
     
 
-    public TronconDuVol(Vol vol, String code,double carburantNecessaire ,Aeroport depart, Aeroport destination, DateVol date, double longueur) {
-        this.vol = vol;
+    public TronconDuVol(/* Vol vol, */ String code,double carburantNecessaire ,Aeroport depart, Aeroport destination,/*  DateVol date, */ double longueur) {
+        /* this.vol = vol; */
         this.code = depart.getCode()+"%20"+destination.getCode(); // a changer, incorporer depart et desnation avec le code
         this.depart = depart;
         this.destination = destination;
-        this.date = date;
+        /* this.date = date; */
         this.longueur = longueur;
         this.carburantNecessaire = carburantNecessaire;   
     }
-
     
     public Vol getVol() {
         return vol;
@@ -69,9 +70,9 @@ public class TronconDuVol {
         return carburantNecessaire;
     }
 
-
     public void setCarburantNecessaire(double carburantNecessaire) {
         this.carburantNecessaire = carburantNecessaire;
     }
 
+    //methods
 }
