@@ -2,13 +2,13 @@ package Exceptions;
 
 public class InvalidValeurException extends Exception{
     private String message;
-    public InvalidValeurException(int choix,double arg){
+    public InvalidValeurException(int choix,String code,double arg){
         switch (choix) {
             case 0:// CapaciteVolMax<=0
-                message = "Impossible de créer une appareil ayant le nombre maximum des voyages qu'elle peut effectuer = "+arg;
+                message = "Impossible de créer l'appareil "+code+" car le nombre maximum des voyages qu'elle peut effectuer = "+arg;
                 break;
             case 1:// ChargeUtilMax < ChargeUtilMin
-                message="La charge utile max que tu as saisie est < "+ arg;
+                message="La charge utile max de l'appareil "+code+" est < "+ arg;
                 break;
             case 2: // 
                 break;

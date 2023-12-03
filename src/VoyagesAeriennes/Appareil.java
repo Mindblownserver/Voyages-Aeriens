@@ -1,5 +1,6 @@
 package VoyagesAeriennes;
 
+import java.util.Arrays;
 import java.util.Date;
 
 import Exceptions.*;
@@ -26,9 +27,9 @@ public class Appareil implements Aviation{
         if(tailleCodes !=0 && existe(code))
             throw new ValeurNotUniqueException(0,code);
         if(capaciteVolesMax<=0)
-            throw new InvalidValeurException(0,capaciteVolesMax);
+            throw new InvalidValeurException(0,code,capaciteVolesMax);
         if(chargeUtilMax<200)
-            throw new InvalidValeurException(1,200);
+            throw new InvalidValeurException(1,code ,200);
         this.code = code;
         // ajouter code
         ajouterElement(code);
@@ -41,7 +42,9 @@ public class Appareil implements Aviation{
         //this.chargeUtile = new double[0];
         this.consommationSupp = consommationSupp;
         this.voles = new Vol[0];
-        this.capaciteVoles ++;;
+        this.dates = new DateVol[0];
+        this.capaciteVoles ++;
+        this.capaciteDates++;
     }
 
     public static void ajouterElement(String code){
@@ -59,6 +62,14 @@ public class Appareil implements Aviation{
         return(i>=tailleCodes)?false:true;
     }
 
+    
+    @Override
+    public String toString() {
+        return "Code=" + code + ", CapaciteCarburant=" + capaciteCarburant + ", Equipage=" + equippage
+                + ", ConsommationVide=" + consommationVide + ", ChargeUtilMax=" + chargeUtilMax + ", ConsommationSupp="
+                + consommationSupp + ", il accepte au max "+capaciteVolesMax+", et il a "+capaciteVoles+" Vol(s):{" + Arrays.toString(voles) + "}"
+                +" il a "+capaciteDates+" date(s):{" + Arrays.toString(dates) + "}";
+    }
 
     // getters & setters
     public int getCapaciteVolesMax() {

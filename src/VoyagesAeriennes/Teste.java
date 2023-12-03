@@ -2,6 +2,7 @@ package VoyagesAeriennes;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 import Exceptions.*;
@@ -48,8 +49,8 @@ class Init{
         Airbus350 = new Appareil("Airbus 350", capaciteCarb, equipage, capaciteVolMax+2, consommVide, consommSupp, chargeUtilMax);
         Airbus380 = new Appareil("Airbus 380", capaciteCarb, equipage, capaciteVolMax+1, consommVide, consommSupp, chargeUtilMax);
         Boeing737 = new Appareil("Boeing 737", capaciteCarb, equipage, capaciteVolMax-1, consommVide, consommSupp, chargeUtilMax);
-        Boeing747 = new Appareil("Boeing 747", capaciteCarb, equipage, capaciteVolMax-4, consommVide, consommSupp, chargeUtilMax);
-        Boeing777 = new Appareil("Boeing 777", capaciteCarb, equipage, capaciteVolMax-2, consommVide, consommSupp, chargeUtilMax);
+        //Boeing747 = new Appareil("Boeing 747", capaciteCarb, equipage, capaciteVolMax-4, consommVide, consommSupp, chargeUtilMax);
+        //Boeing777 = new Appareil("Boeing 777", capaciteCarb, equipage, capaciteVolMax-2, consommVide, consommSupp, chargeUtilMax);
         Boeing787 = new Appareil("Boeing 787", capaciteCarb, equipage, capaciteVolMax, consommVide, consommSupp, chargeUtilMax);
 
         // ArrayLists
@@ -71,19 +72,19 @@ class Init{
         appareils.add(Airbus380);
         appareils.add(Airbus330);
         appareils.add(Boeing737);
-        appareils.add(Boeing747);
-        appareils.add(Boeing777);
+        /* appareils.add(Boeing747);
+        appareils.add(Boeing777); */
         appareils.add(Boeing787);
     }
     public void afficheToutAeroports(){
         for(Aeroport air: airports){
-            System.out.println(air);
+            afficherElement(air);
         }
     }
 
     public void afficheToutAppareils(){
         for(Appareil app: appareils){
-            System.out.println(app);
+            afficherElement(app);
         }
     }
     // mixed feelings for this one
@@ -96,25 +97,40 @@ class Init{
         }
         return -1;
     }
+    public <T extends Aviation> int listerElements(ArrayList<T> arr){
+        int i,n;
+        for(i=0;i<arr.size();i++){
+            System.out.printf("%d-%s\n",i+1,arr.get(i).getCode());
+        }
+        do{
+            System.out.print("Votre Reponse:");
+            n = sc.nextInt(); // n va representer le i+1
+        }while(n>arr.size());
+        return n-1;
+    }
+    public <T> void afficherElement(T element){
+        System.out.println("---------------");
+        System.out.println(element);
+    }
+
     public void afficheWelcome(){
+        System.out.println("---------------\n");
         System.out.println("1-Consultation\n2-Quitter\nVotre Reponse:");
         int n = sc.nextInt();
         if(n==1)
             this.afficheConsultation();
         else {
             System.out.println("Merci pour utiliser mon application d'aviation...");
-            System.exit(n);
         }
     }
     public void afficheConsultation(){
-        System.out.println("Voici les commandes pour l'operation Consultation:");
-        System.out.println("1-Affichage\n2-Calculer consommation en Vol\n3-Calculer longueur d'une Vol\n 4-Calculer (en litres) la quantite du carburant nécessaire pour un vol\n5-Calculer (en litres) la quantite du carburant nécessaire pour un tronçon du vol\n6-Calculer Nombre des escales pour un Vol\nVotre reponse:");
+        System.out.println("---------------\nVoici les commandes pour l'operation Consultation:");
+        System.out.print("1-Affichage\n2-Calculer consommation en Vol\n3-Calculer longueur d'une Vol\n4-Calculer (en litres) la quantite du carburant nécessaire pour un vol\n5-Calculer (en litres) la quantite du carburant nécessaire pour un tronçon du vol\n6-Calculer Nombre des escales pour un Vol\nVotre reponse:");
         int n= sc.nextInt();
         switch (n) {
-            case 0:
+            case 1:
                 this.afficherAffichage();
                 break;
-            case 1:
             case 2:
             case 3:
             case 4:
@@ -127,13 +143,17 @@ class Init{
         this.afficheWelcome();
     }
     public void afficherAffichage(){
-        System.out.println("Que'est qu'on va afficher?");
-        System.out.println("1-Tout aeroports\n2-Un aeroport\n3-Tout vols\n4-Un vol\n5-Tout appareils\n6-Un appareil\n7-touts Tronçons\n8-Un tronçon\nVotre reponse:");
+        System.out.println("---------------\nQue'est qu'on va afficher?");
+        System.out.print("1-Tout aeroports\n2-Un aeroport\n3-Tout vols\n4-Un vol\n5-Tout appareils\n6-Un appareil\n7-touts Tronçons\n8-Un tronçon\nVotre reponse:");
+        int indice;
         switch (sc.nextInt()) {
             case 1:
                 afficheToutAeroports();
                 break;
             case 2:
+                System.out.println("Choisir un d'entre eux:\n");
+                indice = listerElements(airports);
+                afficherElement(airports.get(indice));
                 break;
             case 3:
                 break;
@@ -141,6 +161,10 @@ class Init{
             case 5:
                 afficheToutAppareils();
                 break;
+            case 6:
+                System.out.println("Choisir un d'entre eux:\n");
+                indice = listerElements(appareils);
+                afficherElement(appareils.get(indice)); 
             default:
                 break;
         }
@@ -156,10 +180,15 @@ public class Teste {
             Init a = new Init();
             a.afficheWelcome();
                 
-        }catch(Exception e){
+        }catch(InputMismatchException e){
+            System.out.println("Vous n'avez pas saisi un chiffre\nArrêt du programme");
+
+        }
+        catch(Exception e){
             System.out.println(e);
         }finally{
             Init.sc.close();
+            System.exit(0);
         }
     }
 }

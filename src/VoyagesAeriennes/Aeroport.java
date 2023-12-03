@@ -1,7 +1,6 @@
 package VoyagesAeriennes;
 
 import java.util.Arrays;
-import java.util.Random;
 
 import Exceptions.VolNotFoundException;
 import MethodesStatiques.MethodesUniverselles;
@@ -23,7 +22,7 @@ public class Aeroport implements Aviation {
         this.nom = nom;
         this.rating = rating;
         //this.code = generateString(nom+"0123456789@^\\#&~|-_@=+°)({}[]", 5,tailleCodes);
-        this.code = Integer.toString(N);
+        this.code = nom + " " +Integer.toString(N);
         N++;
         // ajouter code unique au codes
         ajouterElement(code);
@@ -37,8 +36,8 @@ public class Aeroport implements Aviation {
     
     @Override
     public String toString() {
-        return "Aeroport: nom=" + nom + ", code=" + code + ", rating=" + rating + "%, tarif=" + tarif + ", on a "+capaciteVolesDeparts+" vol(s) de depart:" + Arrays.toString(volesDeparts)
-                + ", on a "+capaciteVolesArrive+" vol(s) d'arrivé: "+ Arrays.toString(volesArrive)+"\n";
+        return "Aeroport: nom=" + nom + ", code=" + code + ", rating=" + rating + "%, tarif=" + tarif + ", on a "+capaciteVolesDeparts+" vol(s) de depart:{" + Arrays.toString(volesDeparts)
+                + "}, on a "+capaciteVolesArrive+" vol(s) d'arrivé: {"+ Arrays.toString(volesArrive)+"}";
     }
 
     //getters & setters
