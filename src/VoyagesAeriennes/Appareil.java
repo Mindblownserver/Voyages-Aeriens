@@ -1,13 +1,14 @@
 package VoyagesAeriennes;
 
-import Exceptions.ChargeUtilMaxDepasseException;
-import Exceptions.ModelAppareilNotUniqueException;
+import java.util.Date;
+
+import Exceptions.*;
 import MethodesStatiques.MethodesUniverselles;
 
-public class Appareil {
-    private String model;
-    private static String models[];
-    private static int tailleModels=0;
+public class Appareil implements Aviation{
+    private String code;
+    private static String codes[];
+    private static int tailleCodes=0;
     private double capaciteCarburant,equippage;
     private double consommationVide; // n’inclut pas le transport du carburant lui-même
     private double chargeUtilMax;
@@ -21,13 +22,18 @@ public class Appareil {
     private int capaciteChargeUtil=-1; */
     
     // Constructor    
-    public Appareil(String model, double capaciteCarburant, double equippage, int capaciteVolesMax, double consommationVide, double consommationSupp, double chargeUtilMax)throws ModelAppareilNotUniqueException {
-        if(existe(model, models, tailleModels))
-            throw new ModelAppareilNotUniqueException(model);
-        this.model = model;
-        // ajouter model
-        ajouterElement(model);
+    public Appareil(String code, double capaciteCarburant, double equippage, int capaciteVolesMax, double consommationVide, double consommationSupp, double chargeUtilMax)throws ValeurNotUniqueException, InvalidValeurException {
+        if(tailleCodes !=0 && existe(code))
+            throw new ValeurNotUniqueException(0,code);
+        if(capaciteVolesMax<=0)
+            throw new InvalidValeurException(0,capaciteVolesMax);
+        if(chargeUtilMax<200)
+            throw new InvalidValeurException(1,200);
+        this.code = code;
+        // ajouter code
+        ajouterElement(code);
         this.chargeUtilMax = chargeUtilMax;
+
         this.capaciteVolesMax = capaciteVolesMax;
         this.capaciteCarburant = capaciteCarburant;
         this.equippage = equippage;
@@ -38,19 +44,19 @@ public class Appareil {
         this.capaciteVoles ++;;
     }
 
-    public static void ajouterElement(String model){
-        String m[] = new String[tailleModels+1];
-        MethodesUniverselles.copierTableaux(m,models,tailleModels);
-        m[tailleModels] = model;
-        models = m;
-        tailleModels++;
+    public static void ajouterElement(String code){
+        String m[] = new String[tailleCodes+1];
+        MethodesUniverselles.copierTableaux(m,codes,tailleCodes);
+        m[tailleCodes] = code;
+        codes = m;
+        tailleCodes++;
     }
 
-    public static boolean existe(String ch, String[]tab,int tailleC){
+    public  boolean existe(String ch){
         int i=0;
-        while(ch.compareTo(tab[i])!=0 && i<tailleC)
+        while(i<tailleCodes && ch.compareTo(codes[i])!=0)
             i++;
-        return(i>=tailleC)?false:true;
+        return(i>=tailleCodes)?false:true;
     }
 
 
@@ -63,24 +69,24 @@ public class Appareil {
         this.capaciteVolesMax = capaciteVolesMax;
     }
 
-    public String getModel() {
-        return model;
+    public String getCode() {
+        return code;
     }
     
-    public static String[] getModels() {
-        return models;
+    public static String[] getCodes() {
+        return codes;
     }
 
-    public static void setModels(String[] models) {
-        Appareil.models = models;
+    public static void setCodes(String[] codes) {
+        Appareil.codes = codes;
     }
 
-    public static int getTailleModels() {
-        return tailleModels;
+    public static int getTailleCodes() {
+        return tailleCodes;
     }
 
-    public static void setTailleModels(int tailleModels) {
-        Appareil.tailleModels = tailleModels;
+    public static void setTailleCodes(int tailleCodes) {
+        Appareil.tailleCodes = tailleCodes;
     }
 
     public double getChargeUtilMax() {
@@ -103,8 +109,8 @@ public class Appareil {
     }
 
 
-    public void setModel(String model) {
-        this.model = model;
+    public void setCode(String code) {
+        this.code = code;
     }
     
     public double getCapaciteCarburant() {
@@ -170,7 +176,13 @@ public class Appareil {
     }
     // methods
     public int getVolParDate(DateVol date){ // à faire
-        return 0;
+        int res = 0;
+        for(int i =0;i<capaciteVoles;i++){
+
+            if(voles[i].getDates()[0].getDateDepart().equals(date.getDateDepart()) && voles[i].getDates()[capaciteVoles-1].getDateArrive().equals(date.getDateArrive()))
+                res+=1;
+        }
+        return res;
     }
 
     public double getConsommationEnVol(){
@@ -178,7 +190,7 @@ public class Appareil {
     }
     
     public boolean equals(Appareil A){
-        return (this.model==A.model)?true:false;
+        return (this.code==A.code)?true:false;
     }
     
     public void ajouterVol(Vol V){
@@ -191,7 +203,7 @@ public class Appareil {
         capaciteVoles++;
     }
     
-    public void supprimerVol(Vol V){
+    public void supprimerVol(Vol V) throws VolNotFoundException{
         Vol v = voles[0];
         int i=0;
         while(!V.equals(v) && i<capaciteVoles){
@@ -203,17 +215,22 @@ public class Appareil {
             capaciteVoles--;
         }
         else{
-            return;// exception!
+            throw new VolNotFoundException(V);
         }
     }
-    public void ajouterDate(DateVol date){
+    public void ajouterDate(DateVol date) throws InvalidValeurException{
+        Date today = new Date();
+        // Tester si la date est valide(>= date d'aujourd'hui)
+        if(date.getDateDepart().compareTo(today)<0)
+            throw new InvalidValeurException(0);
+        // ajouter la date
         DateVol d[] = new DateVol[capaciteDates+1];
         MethodesUniverselles.copierTableaux(d,dates,capaciteDates);
         d[capaciteDates] = date;
         dates = d;
         capaciteDates++;
     }
-    public void supprimerDate(DateVol date){
+    public void supprimerDate(DateVol date)throws DateVolNotFoundException{
         int i=0;
         DateVol d = dates[0];
         while(!d.equals(date) && i<capaciteDates){
@@ -225,7 +242,7 @@ public class Appareil {
             capaciteDates--;
         }
         else{
-            return;// exception!
+            throw new DateVolNotFoundException(date);
         }
     }
     public void ravitalleEnCarburant(double carburant){ this.capaciteCarburant += carburant;}

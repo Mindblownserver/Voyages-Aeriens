@@ -37,6 +37,5 @@ public class Contenir {
     }
     public void setDate(DateVol date) {
         this.date = date;
-    }
-    
+    }   
 }

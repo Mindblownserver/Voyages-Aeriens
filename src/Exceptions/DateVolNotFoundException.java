@@ -1,7 +1,6 @@
 package Exceptions;
 
 import VoyagesAeriennes.DateVol;
-import VoyagesAeriennes.Vol;
 
 public class DateVolNotFoundException extends Exception {
     public String message;

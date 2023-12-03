@@ -1,14 +1,13 @@
 package VoyagesAeriennes;
 
-import Exceptions.CapaciteVolMaxDepasseException;
-import Exceptions.ChargeUtilMaxDepasseException;
+import Exceptions.*;
 
 public class Effectuer {
     private DateVol date;
     private Vol V;
     private Appareil A;
     
-    public Effectuer(Vol V, Appareil A, DateVol date, double chargeUtile) throws ChargeUtilMaxDepasseException, CapaciteVolMaxDepasseException{
+    public Effectuer(Vol V, Appareil A, DateVol date, double chargeUtile) throws ChargeUtilMaxDepasseException, CapaciteVolMaxDepasseException, InvalidValeurException{
         this.V = V;
         this.A = A;
         this.date = date;
@@ -18,6 +17,8 @@ public class Effectuer {
         if(this.A.chargeUtileValide(chargeUtile)) this.V.setChargeUtile(chargeUtile);
         if(this.A.getVolParDate(date)>=this.A.getCapaciteVolesMax()) // à réviser
             throw new CapaciteVolMaxDepasseException(A);
+        // ajouter les dates >= date d'aujourd'hui
+        
         this.A.ajouterDate(date);
         this.A.ajouterVol(V);
         this.date.ajouterVol(V);

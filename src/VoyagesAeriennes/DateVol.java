@@ -3,11 +3,12 @@ package VoyagesAeriennes;
 import java.util.Date;
 
 import Exceptions.AppareilNotFoundException;
-import Exceptions.CodeDateVolNotUniqueException;
+import Exceptions.ValeurNotUniqueException;
 import Exceptions.VolNotFoundException;
 import MethodesStatiques.MethodesUniverselles;
 
-public class DateVol {
+public class DateVol implements Aviation{
+    private String code;
     private static String codes[];// le dateDepart et dateArrive sont des clés primaires
     private static int tailleC=0;
     private Date dateDepart;
@@ -17,10 +18,11 @@ public class DateVol {
     private Appareil appareils[];
     private int capaciteAppareil=-1;
 
-    public DateVol(Date dateDepart, Date dateArrive)throws CodeDateVolNotUniqueException {
-        if(existe(dateDepart+"-"+dateArrive))
-            throw new CodeDateVolNotUniqueException(dateDepart+"-"+dateArrive);
-        ajouterElement(dateDepart+" "+dateArrive);
+    public DateVol(Date dateDepart, Date dateArrive)throws ValeurNotUniqueException {
+        this.code = dateDepart+"-"+dateArrive;
+        if(tailleC!=0 && existe(code))
+            throw new ValeurNotUniqueException(1,dateDepart+"-"+dateArrive);
+        ajouterElement(dateDepart+"-"+dateArrive);
         this.dateDepart = dateDepart;
         this.dateArrive = dateArrive;
         this.capaciteVoles ++;
@@ -34,6 +36,14 @@ public class DateVol {
         return dateDepart;
     }
     
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+
     public void setDateDepart(Date dateDepart) {
         this.dateDepart = dateDepart;
     }

@@ -1,11 +1,13 @@
 package VoyagesAeriennes;
 
-import Exceptions.DateVolNotFoundException;
+import Exceptions.ValeurNotUniqueException;
 
 //Est-ce que j'utilise une classe differente pour décrire le Troncon du vol ou simplement met ses attributs dans la classe Vol? 
 //  ajouter controle sur la date saisie, date < date d'aujourd'hui;
-public class TronconDuVol {
+public class TronconDuVol implements Aviation {
     private Vol vol;
+    private static int tailleC=0;
+    private static String codes[];
     private String code;
     private Aeroport depart;
     private Aeroport destination;
@@ -14,8 +16,10 @@ public class TronconDuVol {
     private double carburantNecessaire; // (en litres)
     
 
-    public TronconDuVol(/* Vol vol, */ String code,double carburantNecessaire ,Aeroport depart, Aeroport destination,/*  DateVol date, */ double longueur) {
+    public TronconDuVol(/* Vol vol, */ String code,double carburantNecessaire ,Aeroport depart, Aeroport destination,/*  DateVol date, */ double longueur)throws ValeurNotUniqueException {
         /* this.vol = vol; */
+        if(tailleC!=0 && existe(code))
+            throw new ValeurNotUniqueException(2,depart.getCode()+"%20"+destination.getCode());
         this.code = depart.getCode()+"%20"+destination.getCode(); // a changer, incorporer depart et desnation avec le code
         this.depart = depart;
         this.destination = destination;
@@ -75,4 +79,10 @@ public class TronconDuVol {
     }
 
     //methods
+    public boolean existe(String code){
+        int i=0;
+        while(code.compareTo(codes[i])!=0 && i<tailleC)
+            i++;
+        return(i>=tailleC)?false:true;
+    }
 }

@@ -1,12 +1,14 @@
 package VoyagesAeriennes;
 
+import java.util.Arrays;
 import java.util.Random;
 
 import Exceptions.VolNotFoundException;
 import MethodesStatiques.MethodesUniverselles;
 
-public class Aeroport {
+public class Aeroport implements Aviation {
     private String nom;
+    private static int N=0;
     private String code;
     private static String codes[];
     private static int tailleCodes=0;
@@ -15,20 +17,39 @@ public class Aeroport {
     private Vol volesArrive[];
     private int capaciteVolesArrive =-1;
     private TarifLocal tarif;
+    private double rating;
     
-    public Aeroport(String nom){
+    public Aeroport(String nom, TarifLocal tarif, double rating){
         this.nom = nom;
-        this.code = generateString(nom+"0123456789@^\\#&~|-_@=+°)({}[]", 5,tailleCodes);
+        this.rating = rating;
+        //this.code = generateString(nom+"0123456789@^\\#&~|-_@=+°)({}[]", 5,tailleCodes);
+        this.code = Integer.toString(N);
+        N++;
         // ajouter code unique au codes
         ajouterElement(code);
         // voles
+        this.tarif = tarif;
         this.capaciteVolesDeparts ++;
         this.volesDeparts = new Vol[capaciteVolesDeparts];
         this.capaciteVolesArrive ++;
         this.volesArrive = new Vol[capaciteVolesArrive];
     }   
+    
+    @Override
+    public String toString() {
+        return "Aeroport: nom=" + nom + ", code=" + code + ", rating=" + rating + "%, tarif=" + tarif + ", on a "+capaciteVolesDeparts+" vol(s) de depart:" + Arrays.toString(volesDeparts)
+                + ", on a "+capaciteVolesArrive+" vol(s) d'arrivé: "+ Arrays.toString(volesArrive)+"\n";
+    }
 
     //getters & setters
+    public double getRating() {
+        return rating;
+    }
+
+    public void setRating(double rating) {
+        this.rating = rating;
+    }
+    
     public String getNom() {
         return nom;
     }
@@ -106,27 +127,8 @@ public class Aeroport {
         tailleCodes++;
     }
 
-    public static boolean existe(String ch, String[]tab,int tailleC){
-        int i=0;
-        while(ch.compareTo(tab[i])!=0 && i<tailleC)
-            i++;
-        return(i>=tailleC)?false:true;
-    }
-
-    public static String generateString(String characters, int length, int tailleC){
-        char[] text = new char[length];
-        Random rng = new Random();
-        String res;
-        do{
-            for (int i = 0; i < length; i++)
-            {
-                text[i] = characters.charAt(rng.nextInt(characters.length()));
-            }
-            res = new String(text);
-        }while(existe(res,codes,tailleC));
-        return res;
-    }
-
+    
+    
     public void ajouterVolDeparts(Vol V){
         Vol v[] = new Vol[capaciteVolesDeparts+1];
         MethodesUniverselles.copierTableaux(v, volesDeparts, capaciteVolesDeparts);
@@ -134,7 +136,7 @@ public class Aeroport {
         volesDeparts = v;
         capaciteVolesDeparts++;
     }
-
+    
     public void supprimerVoldDeparts(Vol V) throws VolNotFoundException{
         Vol v = volesDeparts[0];
         int i=0;
@@ -150,7 +152,7 @@ public class Aeroport {
             throw new VolNotFoundException(V);
         }
     }
-
+    
     public void ajouterVolArrive(Vol V){
         Vol v[] = new Vol[capaciteVolesArrive+1];
         MethodesUniverselles.copierTableaux(v, volesArrive, capaciteVolesArrive);
@@ -158,7 +160,7 @@ public class Aeroport {
         volesArrive = v;
         capaciteVolesArrive++;
     }
-
+    
     public void supprimerVoldArrive(Vol V)throws VolNotFoundException{
         Vol v = volesArrive[0];
         int i=0;
@@ -174,7 +176,25 @@ public class Aeroport {
             throw new VolNotFoundException(V);
         }
     }
-
-
-
+    
 }
+
+/* public static String generateString(String characters, int length, int tailleC){
+    char[] text = new char[length];
+    Random rng = new Random();
+    String res;
+    do{
+        for (int i = 0; i < length; i++)
+        {
+            text[i] = characters.charAt(rng.nextInt(characters.length()));
+        }
+        res = new String(text);
+    }while(existe(res,codes,tailleC));
+    return res;
+} */
+/* public static boolean existe(String ch, String[]tab,int tailleC){
+    int i=0;
+    while(ch.compareTo(tab[i])!=0 && i<tailleC)
+        i++;
+    return(i>=tailleC)?false:true;
+} */

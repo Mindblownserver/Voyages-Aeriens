@@ -5,7 +5,7 @@ import Exceptions.InvalidTronconException;
 import MethodesStatiques.MethodesUniverselles;
 
 // verifier l'unicité des clés primaires
-public class Vol {
+public class Vol implements Aviation{
     private String code;
     private Aeroport depart;
     private Aeroport destination;
@@ -39,6 +39,8 @@ public class Vol {
         dates = new DateVol[capaciteDates];
     }
     
+
+
     public Appareil[] getAppareils() {
         return appareils;
     }
