@@ -2,17 +2,18 @@ package VoyagesAeriennes;
 
 import Exceptions.DateVolNotFoundException;
 import Exceptions.InvalidTronconException;
+import Exceptions.InvalidValeurException;
 
 public class Contenir {
     private Vol vol;
     private TronconDuVol troncon;
     private DateVol date;
-    public Contenir(Vol v,TronconDuVol t, DateVol date)throws InvalidTronconException, DateVolNotFoundException{
+    public Contenir(Vol v,TronconDuVol t, DateVol date)throws InvalidValeurException,InvalidTronconException, DateVolNotFoundException{
         this.vol =v;
         this.troncon =t;
         this.date = date;
-        if(!this.vol.existe(date))
-            throw new DateVolNotFoundException(date);
+        /* if(!this.vol.existe(date))
+            throw new DateVolNotFoundException(date); */
         troncon.setVol(this.vol);
         troncon.setDate(date);
 

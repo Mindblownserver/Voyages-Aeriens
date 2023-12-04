@@ -65,10 +65,10 @@ public class Appareil implements Aviation{
     
     @Override
     public String toString() {
-        return "Code=" + code + ", CapaciteCarburant=" + capaciteCarburant + ", Equipage=" + equippage
+        return "\n########\nAppareil " + code + ": CapaciteCarburant=" + capaciteCarburant + ", Equipage=" + equippage
                 + ", ConsommationVide=" + consommationVide + ", ChargeUtilMax=" + chargeUtilMax + ", ConsommationSupp="
-                + consommationSupp + ", il accepte au max "+capaciteVolesMax+", et il a "+capaciteVoles+" Vol(s):{" + Arrays.toString(voles) + "}"
-                +" il a "+capaciteDates+" date(s):{" + Arrays.toString(dates) + "}";
+                + consommationSupp + ", il accepte au max "+capaciteVolesMax+", et il a "+capaciteVoles+" Vol(s):" + Arrays.toString(voles) + ""
+                +" il a "+capaciteDates+" date(s):" + Arrays.toString(dates) + "";
     }
 
     // getters & setters

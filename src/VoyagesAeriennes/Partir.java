@@ -1,23 +1,20 @@
 package VoyagesAeriennes;
 
+import Exceptions.InvalidValeurException;
+
 public class Partir {
     private Aeroport depart;
     private TronconDuVol troncon;
     private Vol vol;
     
-    public Partir(Aeroport depart, Vol vol) {
+    public Partir(Aeroport depart, Vol vol)throws InvalidValeurException {
         this.depart = depart;
         this.vol = vol;
-        this.vol.setDepart(depart);
+        if(!depart.getCode().equals(vol.getDepart().getCode()))
+            throw new InvalidValeurException(0,depart.getNom(),vol.getDepart().getNom());
         depart.ajouterVolDeparts(vol);
 
     }
-    public Partir(Aeroport depart, TronconDuVol troncon) {
-        this.depart = depart;
-        this.troncon = troncon;
-        this.troncon.setDepart(depart);
-    }
-    
     public Aeroport getDepart() {
         return depart;
     }

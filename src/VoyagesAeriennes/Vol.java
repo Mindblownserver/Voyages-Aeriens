@@ -1,7 +1,10 @@
 package VoyagesAeriennes;
 
+import java.util.Arrays;
+
 import Exceptions.AppareilNotFoundException;
 import Exceptions.InvalidTronconException;
+import Exceptions.InvalidValeurException;
 import MethodesStatiques.MethodesUniverselles;
 
 // verifier l'unicité des clés primaires
@@ -19,7 +22,7 @@ public class Vol implements Aviation{
     private double chargeUtile;
 
     public Vol(Aeroport depart, Aeroport destination,String typeVol,double chargeUtil) {
-        code = depart.getCode()+"%20"+destination.getCode();
+        code = depart.getCode()+"-->"+destination.getCode();
         this.typeVol = typeVol;
         this.chargeUtile = chargeUtil;
 
@@ -39,7 +42,11 @@ public class Vol implements Aviation{
         dates = new DateVol[capaciteDates];
     }
     
-
+    public String toString(){
+        if(capaciteDates<=0)
+        return "\n**********\nVol "+code+": du type"+typeVol+" du "+depart.getNom()+" vers "+destination.getNom()+", Il possede "+capaciteTroncon+" troncon(s): "+Arrays.toString(troncons)+", il a "+capaciteAppareil+", appareil(s): "+Arrays.toString(appareils)+", ayant une charge="+chargeUtile;   
+        return "Vol "+code+": du type"+typeVol+" du "+depart.getNom()+" vers "+destination.getNom()+", Il possede "+capaciteTroncon+" troncon(s): "+Arrays.toString(troncons)+", il a "+capaciteAppareil+", appareil(s): "+Arrays.toString(appareils)+", ayant une charge="+chargeUtile+", il depart le "+dates[0].getDateDepart()+" et arrive le "+dates[capaciteDates-1];
+    }
 
     public Appareil[] getAppareils() {
         return appareils;
@@ -224,10 +231,22 @@ public class Vol implements Aviation{
         capaciteTroncon++;
     }
     
-    public boolean tronconValide(TronconDuVol t)throws InvalidTronconException{
+    public boolean tronconValide(TronconDuVol t)throws InvalidTronconException, InvalidValeurException{
+        
+        if(capaciteTroncon<=0){
+            if(!t.getDepart().equals(this.getDepart()))
+                throw new InvalidTronconException(t.getDepart(), this.getDepart());
+            else
+                return true;
+        } 
+            
         TronconDuVol tronconPrec= troncons[capaciteTroncon-1];
-        if(!t.getDepart().equals(tronconPrec.getDestination()) || /* TronconDuVol precedant doit avoir une date inferieure ou égale au nouveau troncon */ tronconPrec.getDate().getDateArrive().compareTo(t.getDate().getDateDepart())>0)
+        if(t.getDepart().getCode().compareToIgnoreCase(tronconPrec.getDestination().getCode())!=0) 
             throw new InvalidTronconException(t.getDepart(), troncons[capaciteTroncon-1].getDestination());
+        /* TronconDuVol precedant doit avoir une date inferieure ou égale au nouveau troncon */
+        System.out.println(this.getCode());    
+        if( tronconPrec.getDate().getDateArrive().compareTo(t.getDate().getDateDepart())>0)
+            throw new InvalidValeurException(1,tronconPrec.getDate().getDateArrive(), t.getDate().getDateDepart());    
         return true;
     }
 

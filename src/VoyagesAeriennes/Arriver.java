@@ -1,22 +1,19 @@
 package VoyagesAeriennes;
 
+import Exceptions.InvalidValeurException;
+
 public class Arriver {
     private Vol V;
     private Aeroport Arrive;
     private TronconDuVol tr;
 
-    public Arriver(Vol V, Aeroport Arrive){
+    public Arriver(Vol V, Aeroport Arrive) throws InvalidValeurException{
         this.V = V;
-        V.setDestination(Arrive);
         this.Arrive = Arrive;
+        if(!Arrive.getCode().equals(V.getDestination().getCode()))
+            throw new InvalidValeurException(0,Arrive.getNom(),V.getDepart().getNom());
         Arrive.ajouterVolArrive(V);
     }
-    public Arriver(TronconDuVol tr, Aeroport Arrive){
-        tr.setDestination(Arrive);
-        this.tr = tr;
-        this.Arrive = Arrive;
-    }
-
     public Vol getV() {
         return V;
     }

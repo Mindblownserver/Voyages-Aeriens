@@ -3,6 +3,7 @@ package VoyagesAeriennes;
 import java.util.Date;
 
 import Exceptions.AppareilNotFoundException;
+import Exceptions.InvalidValeurException;
 import Exceptions.ValeurNotUniqueException;
 import Exceptions.VolNotFoundException;
 import MethodesStatiques.MethodesUniverselles;
@@ -18,17 +19,24 @@ public class DateVol implements Aviation{
     private Appareil appareils[];
     private int capaciteAppareil=-1;
 
-    public DateVol(Date dateDepart, Date dateArrive)throws ValeurNotUniqueException {
+    public DateVol(Date dateDepart, Date dateArrive)throws ValeurNotUniqueException,InvalidValeurException {
         this.code = dateDepart+"-"+dateArrive;
-        if(tailleC!=0 && existe(code))
+        if(tailleC<=0 && existe(code))
             throw new ValeurNotUniqueException(1,dateDepart+"-"+dateArrive);
-        ajouterElement(dateDepart+"-"+dateArrive);
+        if(dateDepart.compareTo(dateArrive)>0)
+            throw new InvalidValeurException(0,dateDepart,dateArrive);
+        
+            ajouterElement(dateDepart+"-"+dateArrive);
         this.dateDepart = dateDepart;
         this.dateArrive = dateArrive;
         this.capaciteVoles ++;
         this.voles = new Vol[capaciteVoles];
         this.capaciteAppareil ++;
         appareils = new Appareil[capaciteAppareil];
+    }
+
+    public String toString(){
+        return "DateVol: du "+dateDepart+" vers "+dateArrive;
     }
 
     //getters & setters
@@ -99,6 +107,7 @@ public class DateVol implements Aviation{
 
     public static boolean existe(String date){
         int i=0;
+        if(tailleC<=0) return false;
         while(date.compareTo(codes[i])!=0 && i<tailleC)
             i++;
         return(i>=tailleC)?false:true;

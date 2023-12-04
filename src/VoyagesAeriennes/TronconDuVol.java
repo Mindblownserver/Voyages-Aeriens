@@ -16,11 +16,11 @@ public class TronconDuVol implements Aviation {
     private double carburantNecessaire; // (en litres)
     
 
-    public TronconDuVol(/* Vol vol, */ String code,double carburantNecessaire ,Aeroport depart, Aeroport destination,/*  DateVol date, */ double longueur)throws ValeurNotUniqueException {
+    public TronconDuVol(/* Vol vol, */double carburantNecessaire ,Aeroport depart, Aeroport destination,/*  DateVol date, */ double longueur)throws ValeurNotUniqueException {
         /* this.vol = vol; */
         if(tailleC!=0 && existe(code))
-            throw new ValeurNotUniqueException(2,depart.getCode()+"%20"+destination.getCode());
-        this.code = depart.getCode()+"%20"+destination.getCode(); // a changer, incorporer depart et desnation avec le code
+            throw new ValeurNotUniqueException(2,depart.getCode()+"-->"+destination.getCode());
+        this.code = depart.getCode()+"-->"+destination.getCode(); // a changer, incorporer depart et desnation avec le code
         this.depart = depart;
         this.destination = destination;
         /* this.date = date; */
@@ -28,6 +28,15 @@ public class TronconDuVol implements Aviation {
         this.carburantNecessaire = carburantNecessaire;   
     }
     
+    
+
+    @Override
+    public String toString() {
+        return "\n_________\nTronconDuVol "+code+": du "+ depart.getNom()+" vers "+ destination.getNom()+", de longueur "+longueur+"et necessite "+ carburantNecessaire+" littres de carburant";
+    }
+
+
+
     public Vol getVol() {
         return vol;
     }
