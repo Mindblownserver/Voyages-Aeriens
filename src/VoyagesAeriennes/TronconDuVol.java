@@ -16,7 +16,7 @@ public class TronconDuVol implements Aviation {
     private double carburantNecessaire; // (en litres)
     
 
-    public TronconDuVol(/* Vol vol, */double carburantNecessaire ,Aeroport depart, Aeroport destination,/*  DateVol date, */ double longueur)throws ValeurNotUniqueException {
+    public TronconDuVol(double carburantNecessaire ,Aeroport depart, Aeroport destination, double longueur)throws ValeurNotUniqueException {
         /* this.vol = vol; */
         if(tailleC!=0 && existe(code))
             throw new ValeurNotUniqueException(2,depart.getCode()+"-->"+destination.getCode());
@@ -32,6 +32,8 @@ public class TronconDuVol implements Aviation {
 
     @Override
     public String toString() {
+        if(this.date!= null)
+            return "\n_________\nTronconDuVol "+code+": du "+ depart.getNom()+" vers "+ destination.getNom()+", de longueur "+longueur+"et necessite "+ carburantNecessaire+" littres de carburant, et depart le "+date.getDateDepart()+" vers "+date.getDateArrive(); 
         return "\n_________\nTronconDuVol "+code+": du "+ depart.getNom()+" vers "+ destination.getNom()+", de longueur "+longueur+"et necessite "+ carburantNecessaire+" littres de carburant";
     }
 

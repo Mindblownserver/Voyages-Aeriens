@@ -2,19 +2,23 @@ package VoyagesAeriennes;
 
 import java.util.Date;
 
-public class TarifLocal {
+public class TarifLocal implements Aviation{
     private Date date;
+    private String code;
     private double valeur; // en dollars par kilo
     public TarifLocal(Date date,double valeur){
+        this.code = "dans la date " + date + ", la valeur est" + valeur + " dollars/littre du carburant";
         this.date = date;
         this.valeur = valeur;
     }
 
     @Override
     public String toString() {
-        return "dans la date " + date + ", la valeur=" + valeur + " dollars/littre du carburant";
+        return "TarifLocal: dans la date " + date + ", la valeur est" + valeur + " dollars/littre du carburant";
     }
-
+    public String getCode(){
+        return code;
+    }
     public Date getDate() {
         return date;
     }

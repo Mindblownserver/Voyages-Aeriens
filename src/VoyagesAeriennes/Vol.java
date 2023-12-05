@@ -44,7 +44,7 @@ public class Vol implements Aviation{
     
     public String toString(){
         if(capaciteDates<=0)
-        return "\n**********\nVol "+code+": du type"+typeVol+" du "+depart.getNom()+" vers "+destination.getNom()+", Il possede "+capaciteTroncon+" troncon(s): "+Arrays.toString(troncons)+", il a "+capaciteAppareil+", appareil(s): "+Arrays.toString(appareils)+", ayant une charge="+chargeUtile;   
+        return "\n**********\nVol "+code+": du type "+typeVol+" du "+depart.getNom()+" vers "+destination.getNom()+", Il possede "+capaciteTroncon+" troncon(s): "+Arrays.toString(troncons)+", il a "+capaciteAppareil+", appareil(s): "+Arrays.toString(appareils)+", ayant une charge="+chargeUtile;   
         return "Vol "+code+": du type"+typeVol+" du "+depart.getNom()+" vers "+destination.getNom()+", Il possede "+capaciteTroncon+" troncon(s): "+Arrays.toString(troncons)+", il a "+capaciteAppareil+", appareil(s): "+Arrays.toString(appareils)+", ayant une charge="+chargeUtile+", il depart le "+dates[0].getDateDepart()+" et arrive le "+dates[capaciteDates-1];
     }
 

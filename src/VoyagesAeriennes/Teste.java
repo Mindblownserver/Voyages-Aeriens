@@ -24,12 +24,14 @@ class Init{
     public ArrayList<Aeroport> airports;
     public ArrayList<Appareil> appareils;
     public TarifLocal tarifTun,tarifFr,tarifTurk,tarifEma,tarifAlg;
+    public ArrayList<TarifLocal> tarifs;
     public Date today = new Date();
     public Date d1;
     public Date d2; 
     public Date d3; 
     public Date d4; 
     public DateVol date1,date2,date3,date4;
+    public ArrayList<DateVol> dates;
     public static Date getDate(int year,int month, int day){
         Calendar c = new GregorianCalendar();
         c.set(year,month,day);
@@ -114,7 +116,6 @@ class Init{
         ajouterContenir(TunAlgVol, TunAlgTr, date1);
         ajouterContenir(AlgEmaVol, AlgTurkTr, date2);
         ajouterContenir(AlgEmaVol, TurkEmaTr, date3);
-        System.out.println(d1);
         ajouterContenir(EmaFrVol, EmaTurkTr, date2);
         ajouterContenir(EmaFrVol, TurkFrTr, date3);
 
@@ -123,6 +124,19 @@ class Init{
         vols = new ArrayList<>();
         appareils = new ArrayList<>();
         troncons = new ArrayList<>();
+        dates = new ArrayList<>();
+        tarifs = new ArrayList<>();
+        // tarifs
+        tarifs.add(tarifAlg);
+        tarifs.add(tarifEma);
+        tarifs.add(tarifFr);
+        tarifs.add(tarifTun);
+        tarifs.add(tarifTurk);
+        // dates des vols
+        dates.add(date1);
+        dates.add(date2);
+        dates.add(date3);
+        
         // troncons
         troncons.add(AlgTurkTr);
         troncons.add(TurkEmaTr);
@@ -213,38 +227,221 @@ class Init{
         System.out.println(element);
     }
 
-    public void afficheWelcome(){
+    public void afficheWelcome() throws InvalidTronconException, InvalidValeurException, DateVolNotFoundException,CapaciteVolMaxDepasseException,ChargeUtilMaxDepasseException,ValeurNotUniqueException{
         System.out.println("---------------\n");
-        System.out.println("1-Consultation\n2-\n3-Quitter\nVotre Reponse:");
+        System.out.println("1-Consultation\n2-Modification\n3-Quitter\nVotre Reponse:");
         int n = sc.nextInt();
-        if(n==1)
-            this.afficheConsultation();
-        else {
-            System.out.println("Merci pour utiliser mon application d'aviation...");
+        switch (n) {
+            case 1:
+                this.afficheConsultation();
+                break;
+            case 2:
+                this.afficheModification();
+                break;
+            case 3:
+                System.out.println("Merci pour utiliser mon application d'aviation...");
+                break;
+            default:
+                break;
+        };
+    }
+    public void afficheModification()throws InvalidTronconException, InvalidValeurException, DateVolNotFoundException,CapaciteVolMaxDepasseException,ChargeUtilMaxDepasseException,ValeurNotUniqueException{
+        System.out.println("---------------\nVoici les commandes pour l'operation Modification:");
+        System.out.print("1-Contenir (relie vol, troncon & date vol)\n2-partir (relie vol et son aeroportde depart)\n3-arriver (relie vol et son aeroport d'arrivé)\n4-Effectuer (relie vol, appareil et date vol)\n5-Ajouter une classe\nVotre reponse:");
+        int n= sc.nextInt(), indiceApp,indiceVol,indiceTr,indiceAero,indiceDate;
+        switch (n) {
+            case 1:
+                System.out.println("Choisir un d'entre eux:\n");
+                indiceVol = listerElements(vols);
+                indiceTr = listerElements(troncons);
+                indiceDate = listerElements(dates);
+                ajouterContenir(vols.get(indiceVol), troncons.get(indiceTr), dates.get(indiceDate));
+                System.out.println("\nResultat:\n");
+                afficherElement(vols.get(indiceVol));
+                afficherElement(dates.get(indiceDate));
+                break;
+            case 2:
+                System.out.println("Choisir un d'entre eux:\n");
+                indiceVol = listerElements(vols);
+                indiceAero= listerElements(airports);
+                ajouterPartir(airports.get(indiceAero), vols.get(indiceVol));
+                System.out.println("\nResultat:\n");
+                afficherElement(airports.get(indiceAero));
+                break;
+            case 3:
+                System.out.println("Choisir un d'entre eux:\n");
+                indiceVol = listerElements(vols);
+                indiceAero= listerElements(airports);
+                ajouterArriver(airports.get(indiceAero), vols.get(indiceVol));
+                System.out.println("\nResultat:\n");
+                afficherElement(airports.get(indiceAero));
+                break;
+            case 4:
+                System.out.println("Choisir un d'entre eux:\n");
+                indiceVol = listerElements(vols);
+                indiceApp = listerElements(appareils);
+                indiceDate = listerElements(dates);
+                ajouterEffectuer(vols.get(indiceVol), appareils.get(indiceApp), dates.get(indiceDate));
+                System.out.println("\nResultat:\n");
+                afficherElement(vols.get(indiceVol));
+                afficherElement(appareils.get(indiceApp));
+                afficherElement(dates.get(indiceDate));
+                break;
+            case 5:
+                System.out.println("Que'est ce que vous voulez ajouter?\n");
+                System.out.print("1-Un aeroport\n2-Un Vol\n3-Un Troncon du vol\n4-Un appareil\n5-Une Date du vol\n6-Un Tarif\nVotre reponse");
+                n = sc.nextInt();
+                ajouterClasse(n);
+            default:
+                break;
+        }
+        this.afficheWelcome();
+    }
+    public void ajouterClasse(int indice)throws ValeurNotUniqueException,InvalidValeurException{
+        int indiceTar,indiceAeroDep,indiceAeroArr;
+        
+        switch (indice) {
+            case 1:
+                System.out.print("\n Saisir le nom de l'aeroport: ");
+                String nom = sc.nextLine()+sc.nextLine();
+                System.out.print("\n Saisir le rating de l'aeroport: ");
+                double rating = sc.nextDouble();
+                System.out.print("\n choisi le tarif de l'aeroport");
+                indiceTar = listerElements(tarifs);
+                airports.add(new Aeroport(nom, tarifs.get(indiceTar), rating));
+                break;
+            case 2:
+                System.out.print("\nChoisir son aeroport de depart:");
+                indiceAeroDep= listerElements(airports);
+                System.out.print("\nChoisir son aeroport de d'arrive:");
+                indiceAeroArr= listerElements(airports);
+                System.out.print("\nQuelle est le type de ce vol:");
+                String type =sc.nextLine()+sc.nextLine();
+                System.out.print("\nQuelle est sa charge util: ");
+                double charge = sc.nextDouble();
+                vols.add(new Vol(airports.get(indiceAeroDep),airports.get(indiceAeroArr),type,charge));
+                break;
+            case 3:
+                System.out.print("\nChoisir son aeroport de depart:");
+                indiceAeroDep= listerElements(airports);
+                System.out.print("\nChoisir son aeroport de d'arrive:");
+                indiceAeroArr= listerElements(airports);
+                System.out.print("\nQuelle est la quantite du carburant necessaire pour effectuer le troncon: ");
+                double carbNecess = sc.nextDouble();
+                System.out.print("\n saisie la distance (longueur) entre l'aeroport de depart et d'arrive (en KM)");
+                double longueur = sc.nextDouble();
+                troncons.add(new TronconDuVol(carbNecess, Paris, Bejaia, longueur));
+                break;
+            case 4:
+                System.out.print("\nQuelle est le model de cet appareil:");
+                String model = sc.nextLine()+sc.nextLine();
+                System.out.print("\nQuelle est le nombre max des vols qu'elle peut effectuer par jour: ");
+                int volMax = sc.nextInt();
+                System.out.print("\nQuelle est sa charge util Max: ");
+                double chargeMax = sc.nextDouble();
+                System.out.print("\nQuelle est son  capacite du carburant: ");
+                double capaCarb = sc.nextDouble();
+                System.out.print("\nQuelle est son equipage: ");
+                double equipe = sc.nextDouble();
+                System.out.print("\nQuelle est son consommation supplémentaire: ");
+                double consoS = sc.nextDouble();
+                System.out.print("\nQuelle est son consommation a vide: ");
+                double consoV = sc.nextDouble();
+                appareils.add(new Appareil(model, capaCarb, equipe, volMax, consoV, consoS, chargeMax));
+                break;
+            case 5:
+                System.out.print("\n donner le jour de depart: ");
+                int jourDep = sc.nextInt();
+                System.out.print("\n donner le mois de depart: ");
+                int moisDep = sc.nextInt();
+                System.out.print("\n donner l'annee de depart: ");
+                int anneeDep = sc.nextInt();
+
+                System.out.print("\n donner le jour d'arrivee: ");
+                int jourArr = sc.nextInt();
+                System.out.print("\n donner le mois d'arrivee: ");
+                int moisArr = sc.nextInt();
+                System.out.print("\n donner l'annee d'arrivee: ");
+                int anneeArr = sc.nextInt();
+                dates.add(new DateVol(getDate(anneeDep, moisDep, jourDep),getDate(anneeArr, moisArr, jourArr)));
+                break;
+            case 6:
+                System.out.print("\n donner le jour de depart: ");
+                int jour = sc.nextInt();
+                System.out.print("\n donner le mois de depart: ");
+                int mois = sc.nextInt();
+                System.out.print("\n donner l'annee de depart: ");
+                int annee = sc.nextInt();
+                System.out.print("\nDonner sa valeur:");
+                int prix = sc.nextInt();
+                tarifs.add(new TarifLocal(getDate(annee, mois, jour), prix));
+                break;
+            default:
+                break;
         }
     }
-    public void afficheConsultation(){
+    public void afficheConsultation()throws InvalidTronconException, InvalidValeurException, DateVolNotFoundException,CapaciteVolMaxDepasseException,ChargeUtilMaxDepasseException,ValeurNotUniqueException{
         System.out.println("---------------\nVoici les commandes pour l'operation Consultation:");
         System.out.print("1-Affichage\n2-Calculer consommation en Vol\n3-Calculer longueur d'une Vol\n4-Calculer (en litres) la quantite du carburant nécessaire pour un vol\n5-Calculer (en litres) la quantite du carburant nécessaire pour un tronçon du vol\n6-Calculer Nombre des escales pour un Vol\nVotre reponse:");
-        int n= sc.nextInt();
+        int n= sc.nextInt(), indice;
         switch (n) {
             case 1:
                 this.afficherAffichage();
                 break;
             case 2:
+                System.out.println("Choisir un d'entre eux:\n");
+                indice = listerElements(appareils);
+                this.afficherConsommVol(appareils.get(indice));
+                break;
             case 3:
+                System.out.println("Choisir un d'entre eux:\n");
+                indice = listerElements(vols);
+                this.afficherLongueurVol(vols.get(indice));
+                break;
             case 4:
+                System.out.println("Choisir un d'entre eux:\n");
+                indice = listerElements(vols);
+                this.afficherCarburantNecessaireVol(vols.get(indice));
+                break;
             case 5:
+                System.out.println("Choisir un d'entre eux:\n");
+                indice = listerElements(troncons);
+                this.afficherCarburantNecessaireVol(troncons.get(indice));
+                break;
             case 6:
+                System.out.println("Choisir un d'entre eux:\n");
+                indice = listerElements(vols);
+                this.afficherNbrEscalesVol(vols.get(indice));
                 break;
             default:
                 break;    
         }
         this.afficheWelcome();
     }
+    public void afficherNbrEscalesVol(Vol v){
+        System.out.printf("Le nombre d'escales à éffectuer pour aller de %s au %s est %d escale(s)",v.getDepart().getNom(),v.getDestination().getNom(),v.getCapaciteTroncon()-1);
+    }
+    public void afficherCarburantNecessaireVol(TronconDuVol t){
+        System.out.printf("La quantité du carburant necessaire pour aller de %s vers %s est %.2f littres",t.getDepart().getNom(),t.getDestination().getNom(),t.getCarburantNecessaire());
+    }
+    public void afficherCarburantNecessaireVol(Vol vol){
+        double carbN = 0;
+        for(TronconDuVol t: vol.getTroncons())
+            carbN+=t.getCarburantNecessaire();
+        System.out.printf("La quantité du carburant necessaire pour aller de %s vers %s est %.2f littres",vol.getDepart().getNom(),vol.getDestination().getNom(),carbN);
+    }
+    public void afficherLongueurVol(Vol vol){
+        double longueur=0;
+        for(TronconDuVol t: vol.getTroncons())
+            longueur+=t.getLongueur();
+        System.out.printf("La longueur d'une vol est %.2f",longueur);
+    }
+    public void afficherConsommVol(Appareil app){
+        System.out.printf("%s: consommation à vide: %.2f\nconsommation supplementaire: %.2f\nconsommation en vol: %.2f",app.getCode(),app.getConsommationVide(),app.getConsommationSupp(),app.getConsommationEnVol());
+    }
     public void afficherAffichage(){
         System.out.println("---------------\nQue'est qu'on va afficher?");
-        System.out.print("1-Tout aeroports\n2-Un aeroport\n3-Tout vols\n4-Un vol\n5-Tout appareils\n6-Un appareil\n7-touts Tronçons\n8-Un tronçon\nVotre reponse:");
+        System.out.print("1-Tout aeroports\n2-Un aeroport\n3-Tout vols\n4-Un vol\n5-Tout appareils\n6-Un appareil\n7-Tout Tronçons\n8-Un tronçon\n9-Tout dates du vol\nVotre reponse:");
         int indice;
         switch (sc.nextInt()) {
             case 1:
@@ -277,6 +474,8 @@ class Init{
                 System.out.println("Choisir un d'entre eux:\n");
                 indice = listerElements(troncons);
                 afficherElement(troncons.get(indice));
+            case 9:
+                afficherToutElements(dates);
             default:
                 break;
         }
