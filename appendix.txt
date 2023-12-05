@@ -1,0 +1,37 @@
+Problème : Voyages aériens
+Le domaine d’application concerne des vols organisés par une compagnie aérienne, et dont on
+veut déterminer la structure du coût. On considère donc qu’un vol relie deux aéroports en
+passant par un certain nombre d’escales, qui sont également, du moins quand les choses se
+passent normalement, des aéroports. Un aéroport porte un nom, mais sera le plus souvent
+désigné par un code standard propre aux compagnies aériennes. Un même vol peut être effectué
+à des dates différentes par des appareils différents. Un appareil, désigné par son modèle, est
+caractérisé par la capacité de ses réservoirs (en kilos de carburant) ainsi que la consommation
+à vide, équipage compris (en kilos de carburant par km). On connaît aussi sa charge utile
+maximale et sa consommation supplémentaire par kilo de charge (en kilos de carburant par kilo
+de charge et par km). Il est à noter cependant que la consommation à vide n’inclut pas le
+transport du carburant lui-même. On admet que la charge utile (fret et passagers) est constante
+pour toute la durée du vol, mais qu’elle peut varier d’une date à l’autre. On connaît la longueur
+de chaque tronçon du vol, c’est-à-dire la distance entre deux aéroports, ou escales, consécutifs
+de ce vol. On supposera que la consommation en vol est une fonction linéaire de la charge
+emportée (charge utile+ carburant).
+À chaque escale, l’appareil est ravitaillé en carburant. Celui-ci est acheté au tarif local (en
+dollars par kilo). Le tarif local dépend de la date. Lorsque l’appareil atterrit à la fin de son vol,
+ainsi qu’à l’aéroport de départ, ses réservoirs peuvent contenir une quantité résiduelle non
+consommée lors du parcours du tronçon précédent. Pour effectuer le tronçon suivant, il est
+généralement nécessaire d’ajouter au réservoir une quantité qui permet d’atteindre l’escale ou
+l’aéroport suivant. Il est cependant possible d’emporter une quantité supérieure à ce qui est
+strictement nécessaire. Ce supplément peut être intéressant si le tarif local est particulièrement
+bas et si le tronçon suivant n’est pas trop long. On fera l’hypothèse que la valeur financière
+d’une quantité résiduelle est à calculer au tarif de l’endroit où cette quantité est observée, donc
+à l’atterrissage (= valeur de revente).On notera que l’appareil est présumé avoir consommé la quantité résiduelle à l’aéroport de
+départ et qu’il faut donc la lui imputer, mais qu’il n’a pas consommé celle qui subsiste après
+l’atterrissage final, et qu’il ne faut donc pas la lui imputer puisqu’elle n’aura pas servi au vol.
+
+Travail demandé:
+1) Proposez les classes Java permettant de modéliser ce problème. N’oubliez pas de tenir
+compte des exceptions et de la notion d’encapsulation de données.
+2) Écrivez la classe principale (contiendra la méthode) permettant de montrer les
+différentes possibilités d’utilisations de chaque classe.
+Chaque étudiant doit exposer son travail au cours de l'avant dernière séance de TP ( le 05
+décembre 2023). Il convient de noter que le travail demandé doit être réalisé avec le système
+BlueJ. Ce système peut être téléchargé via l’adresse http://www.bluej.org.
